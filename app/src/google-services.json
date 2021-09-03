@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "182804567789",
+    "project_id": "tcc-pos-estudio",
+    "storage_bucket": "tcc-pos-estudio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182804567789:android:27c2672adfd1ca808d1ee4",
+        "android_client_info": {
+          "package_name": "com.example.tcc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182804567789-jfrvjr0537ehdul7c9eshlodrir5mfe5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe3dhjdIuvA2u-FpMrvop_jaXnrkbOdps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182804567789-jfrvjr0537ehdul7c9eshlodrir5mfe5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
