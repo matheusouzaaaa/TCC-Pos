@@ -1,4 +1,6 @@
 package com.example.tcc.model
 
-class Estudio {
-}
+import com.google.firebase.firestore.Exclude
+import java.io.Serializable
+
+data class Estudio(val nome: String?=null, val email: String?=null, val senha: String?=null, @Exclude val key: String? = null):Serializable

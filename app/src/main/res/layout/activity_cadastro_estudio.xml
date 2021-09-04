@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/background_light"
+    android:orientation="vertical"
+    tools:context=".CadastroEstudioActivity">
+
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Nome do estúdio:"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+    <EditText
+        android:id="@+id/textoNomeCadastroEstudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="E-mail:"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+    <EditText
+        android:id="@+id/textoEmailCadastroEstudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Senha:"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+
+    <EditText
+        android:id="@+id/textoSenhaCadastroEstudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:padding="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/botaoCadastrarEstudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="cadastrarEstudio"
+            android:text="Cadastrar"
+            app:background="@android:color/holo_green_dark"
+            app:backgroundTint="@android:color/holo_green_dark" />
+
+        <Button
+            android:id="@+id/botaoCancelarEstudio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:background="@android:color/holo_red_dark"
+            app:backgroundTint="@android:color/holo_red_dark"
+            android:onClick="cancelarCadastroEstudio"
+            android:text="Cancelar" />
+    </LinearLayout>
+</LinearLayout>

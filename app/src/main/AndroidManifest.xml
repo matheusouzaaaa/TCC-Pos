@@ -10,13 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC">
         <activity
+            android:name=".CadastroMusicoActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CadastroEstudioActivity"
+            android:exported="true" />
+        <activity
             android:name=".EstudioDetalheActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
