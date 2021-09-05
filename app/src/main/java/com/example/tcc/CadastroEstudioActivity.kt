@@ -1,6 +1,5 @@
 package com.example.tcc
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,22 +10,22 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.example.tcc.model.Estudio
-import com.example.tcc.model.Musico
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlin.collections.hashMapOf as hashMapOf
 
 class CadastroEstudioActivity : AppCompatActivity() {
+    private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
-    lateinit var mDatabase : DatabaseReference
-    var mAuth = FirebaseAuth.getInstance()
-    var user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_estudio)
+        auth= FirebaseAuth.getInstance()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -44,19 +43,46 @@ class CadastroEstudioActivity : AppCompatActivity() {
         val senha = textoSenhaCadastro.text.toString()
 
         if (!email.isEmpty() && !senha.isEmpty() && !nome.isEmpty()) {
-
-            mAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(this, OnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val user = mAuth.currentUser
-                    val uid = user!!.uid
-                    mDatabase.child(uid).child("Name").setValue(nome)
-                }
-            })
-
             val estudio = Estudio(nome, email, senha)
 
-            db.collection("estudios")
-                .add(estudio)
+            Log.d(ContentValues.TAG, "estudio nome  ${nome.toString()}")
+            Log.d(ContentValues.TAG, "estudio email ${email.toString()}")
+            Log.d(ContentValues.TAG, "estudio senha ${senha.toString()}")
+
+            auth.createUserWithEmailAndPassword(email,senha).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Log.d(ContentValues.TAG, "task is successful")
+                    var uid = task.result?.user?.uid;
+                    Log.d(ContentValues.TAG, "user uid $uid")
+                    saveFirestore(task.result?.user, estudio)
+//                    val intent= Intent(this, MainActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+                }else if(task.isComplete){
+                    Log.d(ContentValues.TAG, "task is complete")
+                }else if(task.isCanceled){
+                    Log.d(ContentValues.TAG, "task is canceled")
+                }else{
+                    Log.d(ContentValues.TAG, "task else")
+                }
+            }.addOnFailureListener { exception ->
+                Toast.makeText(applicationContext,exception.localizedMessage,Toast.LENGTH_LONG).show()
+            }
+        }else {
+            Toast.makeText(this, "Preencha todos os dados :(", Toast.LENGTH_LONG).show()
+        }
+        finish()
+    }
+
+    private fun saveFirestore(user: FirebaseUser?, estudio: Estudio?) {
+        user?.let {
+            val dados = hashMapOf(
+                "nome" to estudio?.nome.toString(),
+                "email" to estudio?.email.toString(),
+                "senha" to estudio?.senha.toString(),
+                "key" to user.uid.toString(),
+            )
+            db.collection("estudios").document(it.uid).set(dados)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "DocumentSnapshot added")
                 }
@@ -64,11 +90,7 @@ class CadastroEstudioActivity : AppCompatActivity() {
                     Log.w(ContentValues.TAG, "Error adding document", e)
                 }
             Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
-        }else {
-            Toast.makeText(this, "Erro ao cadastrar estúdio :(", Toast.LENGTH_LONG).show()
         }
-
-        finish()
     }
 
     fun cancelarCadastroEstudio(view: View?) {
