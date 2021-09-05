@@ -79,8 +79,9 @@ class CadastroMusicoActivity : AppCompatActivity() {
                 "email" to musico?.email.toString(),
                 "senha" to musico?.senha.toString(),
                 "key" to user.uid.toString(),
+                "estudio" to false,
             )
-            db.collection("musicos").document(it.uid).set(dados)
+            db.collection("usuarios").document(it.uid).set(dados)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "DocumentSnapshot added")
                 }

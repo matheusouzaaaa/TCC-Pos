@@ -1,7 +1,6 @@
 package com.example.tcc
 
 import android.content.ContentValues
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +11,6 @@ import android.widget.Toast
 import com.example.tcc.model.Estudio
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -55,9 +53,6 @@ class CadastroEstudioActivity : AppCompatActivity() {
                     var uid = task.result?.user?.uid;
                     Log.d(ContentValues.TAG, "user uid $uid")
                     saveFirestore(task.result?.user, estudio)
-//                    val intent= Intent(this, MainActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
                 }else if(task.isComplete){
                     Log.d(ContentValues.TAG, "task is complete")
                 }else if(task.isCanceled){
@@ -81,8 +76,9 @@ class CadastroEstudioActivity : AppCompatActivity() {
                 "email" to estudio?.email.toString(),
                 "senha" to estudio?.senha.toString(),
                 "key" to user.uid.toString(),
+                "estudio" to true,
             )
-            db.collection("estudios").document(it.uid).set(dados)
+            db.collection("usuarios").document(it.uid).set(dados)
                 .addOnSuccessListener {
                     Log.d(ContentValues.TAG, "DocumentSnapshot added")
                 }

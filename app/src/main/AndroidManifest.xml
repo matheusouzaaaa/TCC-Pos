@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC">
         <activity
+            android:name=".EstudioActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MusicoActivity"
+            android:exported="true" />
+        <activity
             android:name=".CadastroMusicoActivity"
             android:exported="true" />
         <activity
