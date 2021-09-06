@@ -3,16 +3,17 @@ package com.example.tcc
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tcc.R.id.recyclerViewSalas
 import com.example.tcc.adapter.EstudioPlaceAdapter
 import com.example.tcc.databinding.ActivityMainBinding
 import com.example.tcc.model.Estudio
@@ -60,10 +61,10 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
             adapter = viewAdapter
         }
 
-//        // dados de outra tela
-//        val nomeTela = findViewById<TextView>(R.id.nomeUsuario)
-//        val nome = intent.getStringExtra("nome")
-//        nomeTela.text = nome.toString()
+        //        // dados de outra tela
+        //        val nomeTela = findViewById<TextView>(R.id.nomeUsuario)
+        //        val nome = intent.getStringExtra("nome")
+        //        nomeTela.text = nome.toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -81,15 +82,14 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
         }
     }
 
-    private fun logout(){
+    private fun logout() {
         Firebase.auth.signOut()
-        val intent = Intent (this, LoginActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         this.startActivity(intent)
     }
 
-        override fun onItemClicked(view: View, position: Int) {
-        val it = Intent(this, EstudioDetalheActivity::class.java)
-        this.posicaoAlterar = position
+    override fun onItemClicked(view: View, position: Int) {
+        val it = Intent(this, EstudioInfosActivity::class.java)
         val estudio = listaEstudios.get(position)
         it.putExtra("estudio", estudio)
         startActivityForResult(it, REQ_DETALHE)
@@ -128,7 +128,8 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
                 // atualizar no banco firestore
 
                 db.collection("estudios").document(estudioPlace.key.toString())
-                    .update("endereco",estudioPlace.endereco?.toString(), "nome", estudioPlace.nome.toString(), "telefone" ,estudioPlace.telefone.toString()
+                    .update(
+                        "endereco", estudioPlace.endereco?.toString(), "nome", estudioPlace.nome.toString(), "telefone", estudioPlace.telefone.toString()
                     )
                     .addOnSuccessListener { document ->
                         Toast.makeText(this, "Atualizado com sucesso", Toast.LENGTH_SHORT).show()
@@ -163,18 +164,19 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
         // listar do firebase
         db.collection("estudios").whereEqualTo("user_id", user_id).addSnapshotListener(object : EventListener<QuerySnapshot> {
             override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-                if(error != null){
+                if (error != null) {
                     Log.e("Firestore Error", error.message.toString())
                 }
 
-                for (dc: DocumentChange in value?.documentChanges!!){
-                    if(dc.type == DocumentChange.Type.ADDED){
+                for (dc: DocumentChange in value?.documentChanges!!) {
+                    if (dc.type == DocumentChange.Type.ADDED) {
 
                         var estudioPlace = EstudioPlace(
                             dc.document.toObject(EstudioPlace::class.java).nome,
                             dc.document.toObject(EstudioPlace::class.java).endereco,
                             dc.document.toObject(EstudioPlace::class.java).telefone,
-                            dc.document.id)
+                            dc.document.id
+                        )
                         listaEstudios.add(estudioPlace)
                     }
                 }

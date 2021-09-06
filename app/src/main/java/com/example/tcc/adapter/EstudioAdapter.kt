@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.R
-import com.example.tcc.model.Estudio
 import com.example.tcc.model.EstudioPlace
 
 class EstudioPlaceAdapter(private var listaEstudios: ArrayList<EstudioPlace>) : RecyclerView.Adapter<EstudioPlaceAdapter.MyViewHolder>() {
@@ -18,7 +17,7 @@ class EstudioPlaceAdapter(private var listaEstudios: ArrayList<EstudioPlace>) : 
         var textoTelefone: TextView
 
         init {
-            textoNome = view.findViewById(R.id.textoNome)
+            textoNome = view.findViewById(R.id.textoSala)
             textoEndereco = view.findViewById(R.id.textoEndereco)
             textoTelefone = view.findViewById(R.id.textoTelefone)
         }

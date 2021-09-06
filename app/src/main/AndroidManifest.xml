@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC">
         <activity
+            android:name=".EstudioInfosActivity"
+            android:exported="true" />
+        <activity
             android:name=".CadastroSalaActivity"
             android:exported="true" />
         <activity
