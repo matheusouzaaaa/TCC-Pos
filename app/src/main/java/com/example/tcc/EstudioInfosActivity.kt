@@ -1,5 +1,6 @@
 package com.example.tcc
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,20 +18,24 @@ import com.example.tcc.adapter.EstudioInfoAdapter
 import com.example.tcc.adapter.EstudioPlaceAdapter
 import com.example.tcc.model.EstudioPlace
 import com.example.tcc.model.Sala
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClickListener {
+
+    private val REQ_CADASTRO = 1;
+    private val REQ_DETALHE = 2;
+
     private lateinit var recyclerViewSalas: RecyclerView
     private lateinit var viewAdapter: EstudioInfoAdapter
     private var listaSalas: ArrayList<Sala> = ArrayList()
     private lateinit var viewManager: RecyclerView.LayoutManager
     private val db = Firebase.firestore
+
+    private var estudio_id: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +49,14 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "aaaa"
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioInfoAdapter(listaSalas)
         viewAdapter.onItemClickListener = this
 
         listarSalas(estudio.key.toString())
+
+        estudio_id = estudio.key.toString()
 
         recyclerViewSalas = findViewById<RecyclerView>(R.id.recyclerViewSalas).apply {
             setHasFixedSize(true)
@@ -118,5 +125,42 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
         Firebase.auth.signOut()
         val intent = Intent (this, LoginActivity::class.java)
         this.startActivity(intent)
+    }
+
+    fun abrirFormularioSala(view: View) {
+        val it = Intent(this, CadastroSalaActivity::class.java)
+        startActivityForResult(it, REQ_CADASTRO)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQ_CADASTRO) {
+            if (resultCode == Activity.RESULT_OK) {
+                val sala = data?.getSerializableExtra("sala") as Sala
+
+                var ref: DocumentReference = db.collection("salas").document()
+                var docId:String = ref.id.toString()
+
+                val dados = hashMapOf(
+                    "nome" to sala?.nome.toString(),
+                    "preco" to sala?.preco?.toFloat(),
+                    "informacoes" to sala?.informacoes.toString(),
+                    "estudio_id" to estudio_id,
+                    "key" to docId,
+                )
+
+                ref.set(dados)
+                    .addOnSuccessListener {
+                        Log.d(ContentValues.TAG, "DocumentSnapshot added")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(ContentValues.TAG, "Error adding document", e)
+                    }
+
+                viewAdapter.notifyDataSetChanged()
+                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 }

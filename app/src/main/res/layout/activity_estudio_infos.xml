@@ -141,7 +141,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="36dp"
-        android:onClick="addSalas"
+        android:onClick="abrirFormularioSala"
         app:backgroundTint="#3C0A97"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
