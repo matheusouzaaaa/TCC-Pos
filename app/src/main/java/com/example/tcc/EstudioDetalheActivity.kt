@@ -31,6 +31,8 @@ class EstudioDetalheActivity : AppCompatActivity() {
         setContentView(R.layout.activity_estudio_detalhe)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         val intent = intent
         val estudioPlace = intent.getSerializableExtra("estudioPlace") as EstudioPlace
         textoNomeDetalhe = findViewById<EditText>(R.id.textoNomeDetalhe).apply {

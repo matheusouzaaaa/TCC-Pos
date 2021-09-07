@@ -47,7 +47,8 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioPlaceAdapter(listaEstudios)

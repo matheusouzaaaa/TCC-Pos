@@ -11,28 +11,33 @@
         android:theme="@style/Theme.TCC">
         <activity
             android:name=".EstudioInfosActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.EstudioDetalheActivity" />
         <activity
             android:name=".CadastroSalaActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.LoginActivity"
+             />
         <activity
             android:name=".EstudioActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.LoginActivity"
+             />
         <activity
             android:name=".MusicoActivity"
-            android:exported="true" />
+             />
         <activity
             android:name=".CadastroMusicoActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.LoginActivity"
+             />
         <activity
             android:name=".CadastroEstudioActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.LoginActivity"
+             />
         <activity
             android:name=".EstudioDetalheActivity"
-            android:exported="true" />
+            android:parentActivityName="com.example.tcc.EstudioActivity"
+             />
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -41,7 +46,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+             />
     </application>
 
 </manifest>

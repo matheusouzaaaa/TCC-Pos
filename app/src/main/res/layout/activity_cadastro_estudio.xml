@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".CadastroEstudioActivity">
 
+    <include layout="@layout/toolbar" />
 
     <TextView
         android:id="@+id/textView2"

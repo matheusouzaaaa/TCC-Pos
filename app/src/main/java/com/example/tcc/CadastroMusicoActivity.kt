@@ -6,15 +6,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.tcc.model.Estudio
 import com.example.tcc.model.Musico
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -27,6 +30,12 @@ class CadastroMusicoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cadastro_musico)
         auth= FirebaseAuth.getInstance()
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,5 +103,21 @@ class CadastroMusicoActivity : AppCompatActivity() {
 
     fun cancelarCadastroMusico(view: View?) {
         finish()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.logout -> {
+            logout()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logout(){
+        Firebase.auth.signOut()
+        val intent = Intent (this, LoginActivity::class.java)
+        this.startActivity(intent)
     }
 }

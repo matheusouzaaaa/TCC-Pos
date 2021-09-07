@@ -1,9 +1,12 @@
 package com.example.tcc
 
 import android.content.ContentValues
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -13,6 +16,7 @@ import com.example.tcc.adapter.EstudioInfoAdapter
 import com.example.tcc.adapter.EstudioPlaceAdapter
 import com.example.tcc.model.EstudioPlace
 import com.example.tcc.model.Sala
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -33,7 +37,8 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioInfoAdapter(listaSalas)
@@ -92,5 +97,26 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
             }
 
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.logout -> {
+            logout()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logout(){
+        Firebase.auth.signOut()
+        val intent = Intent (this, LoginActivity::class.java)
+        this.startActivity(intent)
     }
 }
