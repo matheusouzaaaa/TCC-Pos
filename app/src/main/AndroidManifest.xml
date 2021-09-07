@@ -11,7 +11,8 @@
         android:theme="@style/Theme.TCC">
         <activity
             android:name=".EstudioInfosActivity"
-            android:parentActivityName="com.example.tcc.EstudioDetalheActivity" />
+            android:label="Informações do estúdio"
+            android:parentActivityName="com.example.tcc.EstudioActivity" />
         <activity
             android:name=".CadastroSalaActivity"
             android:parentActivityName="com.example.tcc.LoginActivity"

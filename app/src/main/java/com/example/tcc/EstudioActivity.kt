@@ -20,10 +20,7 @@ import com.example.tcc.model.Estudio
 import com.example.tcc.model.EstudioPlace
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -61,11 +58,6 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
             layoutManager = viewManager
             adapter = viewAdapter
         }
-
-        //        // dados de outra tela
-        //        val nomeTela = findViewById<TextView>(R.id.nomeUsuario)
-        //        val nome = intent.getStringExtra("nome")
-        //        nomeTela.text = nome.toString()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -97,7 +89,7 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
     }
 
     fun abrirFormulario(view: View) {
-        val it = Intent(this, CadastroSalaActivity::class.java)
+        val it = Intent(this, EstudioDetalheActivity::class.java)
         startActivityForResult(it, REQ_CADASTRO)
     }
 
@@ -105,11 +97,21 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_CADASTRO) {
             if (resultCode == Activity.RESULT_OK) {
-                val estudio = data?.getSerializableExtra("estudio") as Estudio
+                val estudioPlace = data?.getSerializableExtra("estudioPlace") as EstudioPlace
+                auth= FirebaseAuth.getInstance()
 
-                // Add a new document with a generated ID
-                db.collection("animais")
-                    .add(estudio)
+                var ref:DocumentReference = db.collection("estudios").document()
+                var docId:String = ref.id.toString()
+
+                val dados = hashMapOf(
+                    "nome" to estudioPlace?.nome.toString(),
+                    "endereco" to estudioPlace?.endereco.toString(),
+                    "telefone" to estudioPlace?.telefone.toString(),
+                    "user_id" to auth.currentUser?.uid.toString(),
+                    "key" to docId,
+                )
+
+                ref.set(dados)
                     .addOnSuccessListener {
                         Log.d(ContentValues.TAG, "DocumentSnapshot added")
                     }
@@ -120,43 +122,6 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
                 viewAdapter.notifyDataSetChanged()
                 Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT)
                     .show()
-            }
-        } else if (requestCode == REQ_DETALHE) {
-            if (resultCode == EstudioDetalheActivity.RESULT_EDIT) {
-                val estudioPlace = data?.getSerializableExtra("estudioPlace") as EstudioPlace
-                listaEstudios.set(this.posicaoAlterar, estudioPlace)
-
-                // atualizar no banco firestore
-
-                db.collection("estudios").document(estudioPlace.key.toString())
-                    .update(
-                        "endereco", estudioPlace.endereco?.toString(), "nome", estudioPlace.nome.toString(), "telefone", estudioPlace.telefone.toString()
-                    )
-                    .addOnSuccessListener { document ->
-                        Toast.makeText(this, "Atualizado com sucesso", Toast.LENGTH_SHORT).show()
-                        Log.d(ContentValues.TAG, "DocumentSnapshot added")
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show()
-                        Log.w("Firebase", "Error adidin documen", e)
-                    }
-                viewAdapter.notifyDataSetChanged()
-            } else if (resultCode == EstudioDetalheActivity.RESULT_DELETE) {
-                val estudioPlace = data?.getSerializableExtra("estudioPlace") as EstudioPlace
-                listaEstudios.removeAt(this.posicaoAlterar)
-
-                db.collection("estudios").document(estudioPlace.key.toString())
-                    .delete()
-                    .addOnSuccessListener { documentReference ->
-                        Toast.makeText(this, "Deletado com sucesso", Toast.LENGTH_SHORT).show()
-                        Log.d(ContentValues.TAG, "Registro deletado com sucesso!")
-                    }
-                    .addOnFailureListener { e ->
-                        Toast.makeText(this, "Erro", Toast.LENGTH_SHORT).show()
-                        Log.w("Firebase", "Error deleting document", e)
-                    }
-
-                viewAdapter.notifyDataSetChanged()
             }
         }
     }

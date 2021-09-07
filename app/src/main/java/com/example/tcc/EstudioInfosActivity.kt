@@ -35,19 +35,19 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_estudio_infos)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = EstudioInfoAdapter(listaSalas)
-        viewAdapter.onItemClickListener = this
-
         val intent = intent
         val estudio = intent.getSerializableExtra("estudio") as EstudioPlace
 
         Log.d(ContentValues.TAG, estudio.toString())
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "aaaa"
+
+        viewManager = LinearLayoutManager(this)
+        viewAdapter = EstudioInfoAdapter(listaSalas)
+        viewAdapter.onItemClickListener = this
 
         listarSalas(estudio.key.toString())
 
