@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.R.id.recyclerViewSalas
 import com.example.tcc.adapter.EstudioPlaceAdapter
-import com.example.tcc.databinding.ActivityMainBinding
 import com.example.tcc.model.Estudio
 import com.example.tcc.model.EstudioPlace
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +27,6 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
     private val REQ_CADASTRO = 1;
     private val REQ_DETALHE = 2;
     private var listaEstudios: ArrayList<EstudioPlace> = ArrayList()
-    private var posicaoAlterar = -1
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: EstudioPlaceAdapter
@@ -36,7 +34,6 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
     private val db = Firebase.firestore
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +41,6 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioPlaceAdapter(listaEstudios)

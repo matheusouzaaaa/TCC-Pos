@@ -25,7 +25,7 @@ class EstudioPlaceAdapter(private var listaEstudios: ArrayList<EstudioPlace>) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EstudioPlaceAdapter.MyViewHolder {
-        val view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_estudio, parent, false) as View
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_estudio, parent, false) as View
         return MyViewHolder(view)
     }
 

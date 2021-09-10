@@ -15,10 +15,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.adapter.EstudioInfoAdapter
-import com.example.tcc.adapter.EstudioPlaceAdapter
 import com.example.tcc.model.EstudioPlace
 import com.example.tcc.model.Sala
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
@@ -48,7 +46,6 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioInfoAdapter(listaSalas)
@@ -75,7 +72,10 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
     }
 
     override fun onItemClicked(view: View, position: Int) {
-        TODO("Not yet implemented")
+        val it = Intent(this, SalaInfosActivity::class.java)
+        val sala = listaSalas.get(position)
+        it.putExtra("sala", sala)
+        startActivityForResult(it, REQ_DETALHE)
     }
 
     fun listarSalas(estudio_id: String?) {

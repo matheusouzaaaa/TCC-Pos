@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EstudioInfosActivity">
+    tools:context=".SalaInfosActivity">
 
-    <include
-        layout="@layout/toolbar" />
+    <include layout="@layout/toolbar" />
 
     <LinearLayout
         android:layout_width="408dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="540dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewSalas"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,17 +31,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Estúdio:"
+                android:text="Sala:"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textoSala"
+                android:id="@+id/textoNomeSala"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="textoSala"
+                android:text="textoNomeSala"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -55,17 +57,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telefone: "
+                android:text="Preço: "
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textoTelefone"
+                android:id="@+id/textoPreco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="textoTelefone"
+                android:text="textoPreco"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -80,17 +82,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Endereço: "
+                android:text="Informações: "
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textoEndereco"
+                android:id="@+id/textoInformacoes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="textoPreco"
+                android:text="textoInformacoes"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -105,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
-                android:text="Salas disponíveis"
+                android:text="Horários disponíveis"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
@@ -116,7 +118,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewSalas"
+        android:id="@+id/recyclerViewHorarios"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="200dp"
@@ -136,7 +138,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="36dp"
         android:layout_marginBottom="36dp"
-        android:onClick="abrirFormularioSala"
+        android:onClick="abrirFormularioHorario"
         app:backgroundTint="#3C0A97"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

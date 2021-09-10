@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/background_light"
     android:orientation="vertical"
-    tools:context=".CadastroActivity">
+    tools:context=".EstudioDetalheActivity">
 
     <include layout="@layout/toolbar" />
 

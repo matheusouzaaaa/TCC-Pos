@@ -10,44 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC">
         <activity
-            android:name=".EstudioInfosActivity"
-            android:label="Informações do estúdio"
-            android:parentActivityName="com.example.tcc.EstudioActivity" />
-        <activity
-            android:name=".CadastroSalaActivity"
-            android:parentActivityName="com.example.tcc.LoginActivity"
-             />
-        <activity
-            android:name=".EstudioActivity"
-            android:parentActivityName="com.example.tcc.LoginActivity"
-             />
-        <activity
-            android:name=".MusicoActivity"
-             />
-        <activity
-            android:name=".CadastroMusicoActivity"
-            android:parentActivityName="com.example.tcc.LoginActivity"
-             />
-        <activity
-            android:name=".CadastroEstudioActivity"
-            android:parentActivityName="com.example.tcc.LoginActivity"
-             />
-        <activity
-            android:name=".EstudioDetalheActivity"
-            android:parentActivityName="com.example.tcc.EstudioActivity"
-             />
-        <activity
-            android:name=".LoginActivity"
-            >
+            android:name=".CadastroHorarioActivity"
+            android:exported="true" />
+        <activity android:name=".SalaInfosActivity" />
+        <activity android:name=".EstudioInfosActivity" />
+        <activity android:name=".CadastroSalaActivity" />
+        <activity android:name=".EstudioActivity" />
+        <activity android:name=".MusicoActivity" />
+        <activity android:name=".CadastroMusicoActivity" />
+        <activity android:name=".CadastroEstudioActivity" />
+        <activity android:name=".EstudioDetalheActivity" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-             />
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
