@@ -22,8 +22,16 @@ import com.example.tcc.model.Sala
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.*
+import kotlin.collections.ArrayList
+
+import devs.mulham.horizontalcalendar.HorizontalCalendar
+
+
+
 
 class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListener{
     private val REQ_CADASTRO = 1;
@@ -64,11 +72,26 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
 
         listarHorarios(intent.getStringExtra("key"))
 
-        recyclerView = findViewById<RecyclerView>(R.id.recyclerViewHorarios).apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
+//        recyclerView = findViewById<RecyclerView>(R.id.recyclerViewHorarios).apply {
+//            setHasFixedSize(true)
+//            layoutManager = viewManager
+//            adapter = viewAdapter
+//        }
+        /* starts before 1 month from now */
+        /* starts before 1 month from now */
+        val startDate: Calendar = Calendar.getInstance()
+        startDate.add(Calendar.MONTH, -1)
+
+        /* ends after 1 month from now */
+
+        /* ends after 1 month from now */
+        val endDate: Calendar = Calendar.getInstance()
+        endDate.add(Calendar.MONTH, 1)
+
+        val horizontalCalendar = HorizontalCalendar.Builder(this, R.id.calendarView)
+            .range(startDate, endDate)
+            .datesNumberOnScreen(5)
+            .build()
 
     }
 
