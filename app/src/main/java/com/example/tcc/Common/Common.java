@@ -1,7 +1,11 @@
 package com.example.tcc.Common;
 
+import org.jetbrains.annotations.Nullable;
+
 public class Common {
     public static final int TIME_SLOT_TOTAL = 8;
+    @Nullable
+    public static final String KEY_DISPLAY_TIME_SLOT = "";
 
     public static String convertTimeSlotToString(int slot){
         switch(slot) {

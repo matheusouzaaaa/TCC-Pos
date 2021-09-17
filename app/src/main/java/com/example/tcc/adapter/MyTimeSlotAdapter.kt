@@ -1,7 +1,9 @@
 package com.example.tcc.adapter
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.Common.Common
 import com.example.tcc.R
 import com.example.tcc.model.TimeSlot
+import java.util.ArrayList
 
-class MyTimeSlotAdapter(private var timeSlotList: List<TimeSlot>): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>() {
+class MyTimeSlotAdapter(private var context: Context, private var timeSlotList: ArrayList<TimeSlot>): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>() {
 //    var onItemClickListener: OnItemClickListener? = null
 
 
@@ -37,13 +40,16 @@ class MyTimeSlotAdapter(private var timeSlotList: List<TimeSlot>): RecyclerView.
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.txt_time_slot.text = Common.convertTimeSlotToString(position).toString()
         if(timeSlotList.size == 0){
+            Log.d(ContentValues.TAG, timeSlotList.toString())
             holder.txt_time_slot_description.text = "Disponível"
-            holder.txt_time_slot_description.setTextColor(Color.BLACK)
-            holder.txt_time_slot.setTextColor(Color.BLACK)
-            holder.card_time_slot.setBackgroundColor(Color.LTGRAY)
+            holder.txt_time_slot_description.setTextColor(Color.GRAY)
+            holder.txt_time_slot.setTextColor(Color.GRAY)
+            holder.card_time_slot.setBackgroundColor(Color.WHITE)
         }else{
+            Log.d(ContentValues.TAG, timeSlotList.toString())
             for (slotValue in timeSlotList) {
-                val slot = Integer.parseInt(slotValue.toString())
+                Log.d(ContentValues.TAG, slotValue.toString())
+                val slot = (slotValue.toString()).toInt()
                 if (slot == position){
                     holder.txt_time_slot_description.text = "Ocupado"
                     holder.txt_time_slot_description.setTextColor(Color.WHITE)

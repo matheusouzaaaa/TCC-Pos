@@ -1,6 +1,5 @@
 package com.example.tcc
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,19 +12,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tcc.adapter.EstudioPlaceAdapter
+import com.example.tcc.Common.ITimeSlotLoadListener
 import com.example.tcc.adapter.MyTimeSlotAdapter
 import com.example.tcc.adapter.SalaInfoAdapter
-import com.example.tcc.model.EstudioPlace
-import com.example.tcc.model.Horario
 import com.example.tcc.model.Sala
 import com.example.tcc.model.TimeSlot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -33,12 +28,22 @@ import kotlin.collections.ArrayList
 
 import devs.mulham.horizontalcalendar.HorizontalCalendar
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
+import java.text.SimpleDateFormat
 
 
-class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListener{
+class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListener, ITimeSlotLoadListener {
     private val REQ_CADASTRO = 1;
     private val REQ_DETALHE = 2;
     private var listaHorarios: ArrayList<TimeSlot> = ArrayList()
+
+    private lateinit var salasDoc: DocumentReference
+    private lateinit var iTimeSlotLoadListener: ITimeSlotLoadListener
+//    private lateinit var dialog: AlertDialog
+//    private lateinit var unbinder: Unbinder
+//    private lateinit var localBroadcastManager: LocalBroadcastManager
+    private lateinit var selected_date: Calendar
+    private var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
+//    private lateinit var displayTimeSlot: BroadcastReceiver
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: MyTimeSlotAdapter
@@ -47,6 +52,8 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // info sala
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sala_infos)
 
@@ -68,13 +75,11 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         textoPreco.text = sala.preco.toString()
         textoInformacoes.text = sala.informacoes.toString()
 
+        // informações dos horários
+//        listaHorarios.add(TimeSlot(3));
+
         viewManager = GridLayoutManager(this,2)
-        viewAdapter = MyTimeSlotAdapter(listaHorarios)
-
-//        listarHorarios(intent.getStringExtra("key"))
-
-        var selected_date = Calendar.getInstance()
-        selected_date.add(Calendar.DATE,0) // init current date
+        viewAdapter = MyTimeSlotAdapter(this, listaHorarios)
 
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewHorarios).apply {
             setHasFixedSize(true)
@@ -82,14 +87,19 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
             adapter = viewAdapter
 
         }
-        /* starts before 1 month from now */
-        /* starts before 1 month from now */
+
+        iTimeSlotLoadListener = this
+
+        // inicia horarios
+
+        // set data atual
+        var selected_date = Calendar.getInstance().apply {
+            add(Calendar.DATE,0)
+        }
+
         val startDate: Calendar = Calendar.getInstance()
         startDate.add(Calendar.DATE, 0)
 
-        /* ends after 1 month from now */
-
-        /* ends after 1 month from now */
         val endDate: Calendar = Calendar.getInstance()
         endDate.add(Calendar.DATE, 30)
 
@@ -100,13 +110,19 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
             .defaultSelectedDate(startDate)
             .build()
 
-                    horizontalCalendar.calendarListener = object: HorizontalCalendarListener(){
-                        override fun onDateSelected(date: Calendar?, position: Int) {
-                            if(selected_date.timeInMillis != date?.timeInMillis){
-                                selected_date = date // this code will not load again if u selected new day with day selected
-                            }
-                        }
-                    }
+        // lista os horários de hoje da sala
+        listarHorarios(sala.key.toString(), simpleDateFormat.format(selected_date.time))
+
+        // se houver mudança de datas, recarrega os horários
+        horizontalCalendar.calendarListener = object: HorizontalCalendarListener(){
+            override fun onDateSelected(date: Calendar?, position: Int) {
+                if(selected_date.timeInMillis != date?.timeInMillis){
+                    selected_date = date // this code will not load again if u selected new day with day selected
+                    Log.d(ContentValues.TAG, simpleDateFormat.format(date?.time))
+                    listarHorarios(sala.key.toString(), simpleDateFormat.format(date?.time))
+                }
+            }
+        }
 
     }
 
@@ -135,34 +151,67 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         TODO("Not yet implemented")
     }
 
-//    fun listarHorarios(sala_id: String?) {
-//        // listar do firebase
-//        db.collection("horarios").whereEqualTo("sala_id", sala_id).addSnapshotListener(object : EventListener<QuerySnapshot> {
-//            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
-//                if (error != null) {
-//                    Log.e("Firestore Error", error.message.toString())
-//                }
-//
-//                for (dc: DocumentChange in value?.documentChanges!!) {
-//                    if (dc.type == DocumentChange.Type.ADDED) {
-//
-//                        var horario = Horario(
-//                            dc.document.toObject(Horario::class.java).nome,
-//                            dc.document.toObject(Horario::class.java).preco,
-//                            dc.document.toObject(Horario::class.java).informacoes,
-//                            dc.document.id
-//                        )
-//                        listaHorarios.add(horario)
-//                    }
-//                }
-//
-//                viewAdapter.notifyDataSetChanged()
-//            }
-//
-//        })
-//    }
+    fun listarHorarios(sala_id: String?, date: String) {
+        Log.d(ContentValues.TAG, "sala_id = $sala_id")
+        Log.d(ContentValues.TAG, "date = $date")
+        listaHorarios.clear();
+        Log.d(ContentValues.TAG, listaHorarios.toString())
+        // listar do firebase
+        db.collection("salas").document(sala_id.toString()).collection(date).addSnapshotListener { value, error ->
+            if (error != null) {
+                Log.d(ContentValues.TAG, "nao carregou os dados")
+                Log.e("Firestore Error", error.message.toString())
+                onTimeSlotLoadFailed(error.message.toString())
+            }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            for (dc: DocumentChange in value?.documentChanges!!) {
+                if (dc.type == DocumentChange.Type.ADDED) {
+                    Log.d(ContentValues.TAG, "carregou")
+                    var horario = TimeSlot(
+                        dc.document.toObject(TimeSlot::class.java).slot.toString()
+                    )
+                    listaHorarios.add(horario)
+                    onTimeSlotLoadSuccess(listaHorarios)
+                }else{
+                    Log.d(ContentValues.TAG, "entrou no else")
+                    onTimeSlotLoadEmpty();
+                }
+            }
+            viewAdapter.notifyDataSetChanged()
+        }
+    }
+
+    override fun onTimeSlotLoadSuccess(timeSlotList: java.util.ArrayList<TimeSlot>?) {
+        val listaHorarios: ArrayList<TimeSlot> = timeSlotList!!
+        viewManager = GridLayoutManager(this,2)
+        viewAdapter = MyTimeSlotAdapter(this, listaHorarios)
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerViewHorarios).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+
+        }
+    }
+
+    override fun onTimeSlotLoadFailed(message: String?) {
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onTimeSlotLoadEmpty() {
+        val listaHorarios: ArrayList<TimeSlot> = ArrayList()
+        viewManager = GridLayoutManager(this,2)
+        viewAdapter = MyTimeSlotAdapter(this, listaHorarios)
+
+        recyclerView = findViewById<RecyclerView>(R.id.recyclerViewHorarios).apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+
+        }
+    }
+
+    //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
 //        if (requestCode == REQ_CADASTRO) {
 //            if (resultCode == Activity.RESULT_OK) {
