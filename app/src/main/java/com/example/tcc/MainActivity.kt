@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
                 if (document != null) {
 
                     if(document.data?.get("estudio") == true){
-                        Log.d(ContentValues.TAG, "Estudio: ${document.data}")
                         val intent = Intent(this, EstudioActivity::class.java)
                         val params = Bundle()
                         params.putString("nome", document.data?.get("nome") as String)
@@ -45,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtras(params)
                         startActivity(intent)
                     }else{
-                        Log.d(ContentValues.TAG, "Musico: ${document.data}")
+//                        Log.d(ContentValues.TAG, "Musico: ${document.data}")
                         val intent = Intent(this, MusicoActivity::class.java)
                         val params = Bundle()
                         params.putString("nome", document.data?.get("nome") as String)
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtras(params)
                         startActivity(intent)
                     }
-                    Log.d(ContentValues.TAG, "DocumentSnapshot data: ${document.data}")
+//                    Log.d(ContentValues.TAG, "DocumentSnapshot data: ${document.data}")
                 } else {
                     Log.d(ContentValues.TAG, "No such document")
                 }

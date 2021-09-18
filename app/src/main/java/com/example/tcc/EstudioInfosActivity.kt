@@ -42,8 +42,6 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
         val intent = intent
         val estudio = intent.getSerializableExtra("estudio") as EstudioPlace
 
-        Log.d(ContentValues.TAG, estudio.toString())
-
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 

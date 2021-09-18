@@ -2,7 +2,6 @@ package com.example.tcc
 
 import android.content.ContentValues
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -10,40 +9,35 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.Common.ITimeSlotLoadListener
 import com.example.tcc.adapter.MyTimeSlotAdapter
-import com.example.tcc.adapter.SalaInfoAdapter
 import com.example.tcc.model.Sala
 import com.example.tcc.model.TimeSlot
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.util.*
-import kotlin.collections.ArrayList
-
 import devs.mulham.horizontalcalendar.HorizontalCalendar
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListener, ITimeSlotLoadListener {
+class SalaInfosActivity : AppCompatActivity(), ITimeSlotLoadListener, MyTimeSlotAdapter.OnItemClickListener {
     private val REQ_CADASTRO = 1;
     private val REQ_DETALHE = 2;
     private var listaHorarios: ArrayList<TimeSlot> = ArrayList()
+    private var posicaoAlterar = -1
 
-    private lateinit var salasDoc: DocumentReference
     private lateinit var iTimeSlotLoadListener: ITimeSlotLoadListener
-//    private lateinit var dialog: AlertDialog
-//    private lateinit var unbinder: Unbinder
-//    private lateinit var localBroadcastManager: LocalBroadcastManager
-    private lateinit var selected_date: Calendar
     private var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
-//    private lateinit var displayTimeSlot: BroadcastReceiver
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: MyTimeSlotAdapter
@@ -60,7 +54,9 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         val intent = intent
         val sala = intent.getSerializableExtra("sala") as Sala
 
-        Log.d(ContentValues.TAG, sala.toString())
+//        Log.d(ContentValues.TAG, sala.toString())
+        val user = Firebase.auth.currentUser
+//        Log.d(ContentValues.TAG, "USER: ${ user?.uid.toString() }")
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -76,8 +72,6 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         textoInformacoes.text = sala.informacoes.toString()
 
         // informações dos horários
-//        listaHorarios.add(TimeSlot(3));
-
         viewManager = GridLayoutManager(this,2)
         viewAdapter = MyTimeSlotAdapter(this, listaHorarios)
 
@@ -147,15 +141,20 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         this.startActivity(intent)
     }
 
-    override fun onItemClicked(view: View, position: Int) {
-        TODO("Not yet implemented")
-    }
-
     fun listarHorarios(sala_id: String?, date: String) {
-        Log.d(ContentValues.TAG, "sala_id = $sala_id")
-        Log.d(ContentValues.TAG, "date = $date")
         listaHorarios.clear();
-        Log.d(ContentValues.TAG, listaHorarios.toString())
+        val user = Firebase.auth.currentUser
+        for (i in 0..7) {
+            var horario = TimeSlot(
+                i.toString(),
+                sala_id.toString(),
+                user?.uid.toString(),
+                date.toString(),
+                "false"
+            )
+            listaHorarios.add(horario)
+        }
+
         // listar do firebase
         db.collection("salas").document(sala_id.toString()).collection(date).addSnapshotListener { value, error ->
             if (error != null) {
@@ -167,16 +166,13 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
             for (dc: DocumentChange in value?.documentChanges!!) {
                 if (dc.type == DocumentChange.Type.ADDED) {
                     Log.d(ContentValues.TAG, "carregou")
-                    var horario = TimeSlot(
-                        dc.document.toObject(TimeSlot::class.java).slot.toString()
-                    )
-                    listaHorarios.add(horario)
-                    onTimeSlotLoadSuccess(listaHorarios)
+                    listaHorarios?.find { it.slot == dc.document.toObject(TimeSlot::class.java).slot.toString() }?.marcado = "true"
                 }else{
                     Log.d(ContentValues.TAG, "entrou no else")
-                    onTimeSlotLoadEmpty();
                 }
             }
+
+            onTimeSlotLoadSuccess(listaHorarios)
             viewAdapter.notifyDataSetChanged()
         }
     }
@@ -199,7 +195,7 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
     }
 
     override fun onTimeSlotLoadEmpty() {
-        val listaHorarios: ArrayList<TimeSlot> = ArrayList()
+        Log.d(ContentValues.TAG, "onTimeSlotLoadEmpty")
         viewManager = GridLayoutManager(this,2)
         viewAdapter = MyTimeSlotAdapter(this, listaHorarios)
 
@@ -211,36 +207,89 @@ class SalaInfosActivity : AppCompatActivity(), SalaInfoAdapter.OnItemClickListen
         }
     }
 
-    //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == REQ_CADASTRO) {
-//            if (resultCode == Activity.RESULT_OK) {
-//                val horario = data?.getSerializableExtra("horario") as Horario
-//                auth= FirebaseAuth.getInstance()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == ConfirmaCadastroHorarioActivity.RESULT_EDIT) {
+            val horario = data?.getSerializableExtra("horario") as TimeSlot
+
+            Log.d(ContentValues.TAG, "horario = $horario")
+            auth = FirebaseAuth.getInstance()
+
+            var ref: DocumentReference = db.collection("salas").document(horario.sala_id.toString()).collection(horario.date.toString()).document(horario.slot.toString())
+
+            val dados = hashMapOf(
+                "slot" to horario?.slot.toString(),
+                "date" to horario?.date.toString(),
+                "sala_id" to horario?.sala_id.toString(),
+                "user_id" to auth.currentUser?.uid.toString(),
+            )
+
+            ref.set(dados)
+                .addOnSuccessListener {
+                    Log.d(ContentValues.TAG, "DocumentSnapshot added")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                }
+
+            viewAdapter.notifyDataSetChanged()
+            Toast.makeText(this, "Horário agendado com sucesso!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+//    override fun onItemClick(position: Int) {
+//        Toast.makeText(this,"HORARIO $position CLICADO",Toast.LENGTH_SHORT).show()
+//        val horario = listaHorarios[position]
+//        Log.d(ContentValues.TAG, "horario = ${horario.toString()}")
+//        auth = FirebaseAuth.getInstance()
 //
-//                var ref: DocumentReference = db.collection("horarios").document()
-//                var docId:String = ref.id.toString()
+//        var ref: DocumentReference = db.collection("salas").document(horario.sala_id.toString()).collection(horario.date.toString()).document(horario.slot.toString())
 //
-//                val dados = hashMapOf(
-//                    "nome" to horario?.nome.toString(),
-//                    "endereco" to horario?.preco.toString(),
-//                    "telefone" to horario?.informacoes.toString(),
-//                    "user_id" to auth.currentUser?.uid.toString(),
-//                    "key" to docId,
-//                )
+//        val dados = hashMapOf(
+//            "slot" to horario?.slot.toString(),
+//            "date" to horario?.date.toString(),
+//            "sala_id" to horario?.sala_id.toString(),
+//            "user_id" to auth.currentUser?.uid.toString(),
+//        )
 //
-//                ref.set(dados)
-//                    .addOnSuccessListener {
-//                        Log.d(ContentValues.TAG, "DocumentSnapshot added")
-//                    }
-//                    .addOnFailureListener { e ->
-//                        Log.w(ContentValues.TAG, "Error adding document", e)
-//                    }
-//
-//                viewAdapter.notifyDataSetChanged()
-//                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT)
-//                    .show()
+//        ref.set(dados)
+//            .addOnSuccessListener {
+//                Log.d(ContentValues.TAG, "DocumentSnapshot added")
 //            }
-//        }
+//            .addOnFailureListener { e ->
+//                Log.w(ContentValues.TAG, "Error adding document", e)
+//            }
+//
+//        viewAdapter.notifyDataSetChanged()
+//        Toast.makeText(this, "Horário agendado com sucesso!", Toast.LENGTH_SHORT).show()
 //    }
+
+    fun cadastrarTeste(view: View){
+        auth = FirebaseAuth.getInstance()
+        ///salas/6jMrjDbbsd90qKJETNJp/18_09_2021/5
+
+        var ref: DocumentReference = db.collection("salas").document("6jMrjDbbsd90qKJETNJp").collection("20_09_2021").document("3")
+
+        val dados = hashMapOf(
+            "slot" to "3",
+            "date" to "20_09_2021",
+            "sala_id" to "6jMrjDbbsd90qKJETNJp",
+            "user_id" to auth.currentUser?.uid.toString(),
+        )
+
+        ref.set(dados)
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "DocumentSnapshot added")
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error adding document", e)
+            }
+
+        viewAdapter.notifyDataSetChanged()
+        Toast.makeText(this, "Horário agendado com sucesso!", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onItemClicked(view: View, position: Int) {
+        Log.d(ContentValues.TAG, "hello motherfucker")
+    }
 }
