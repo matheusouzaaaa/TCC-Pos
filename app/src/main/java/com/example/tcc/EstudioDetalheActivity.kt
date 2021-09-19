@@ -20,6 +20,7 @@ class EstudioDetalheActivity : AppCompatActivity() {
         setContentView(R.layout.activity_estudio_detalhe)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Cadastrar Estúdio"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

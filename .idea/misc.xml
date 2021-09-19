@@ -7,18 +7,22 @@
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.3828125" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3828125" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_cadastro_estudio.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_cadastro_horario.xml" value="0.20108695652173914" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_cadastro_musico.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_cadastro_sala.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_cadastro_usuario.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_confirma_cadastro_horario.xml" value="0.15989583333333332" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_estudio.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_estudio_detalhe.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_estudio_infos.xml" value="0.33" />
+        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_estudio_infos.xml" value="0.1" />
+        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_estudio_infos2.xml" value="0.20108695652173914" />
+        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_lista_ensaios_agendados.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_musico.xml" value="0.19791666666666666" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/activity_sala_infos.xml" value="0.30708035003977724" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/item_banda.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/item_ensaio_agendado.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/item_estudio.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/item_estudio_info.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Matheus Souza/AndroidProjects/TCC/app/src/main/res/layout/item_horario_info.xml" value="0.20520833333333333" />

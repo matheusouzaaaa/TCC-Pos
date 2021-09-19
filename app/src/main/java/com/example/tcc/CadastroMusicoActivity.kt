@@ -33,6 +33,7 @@ class CadastroMusicoActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Cadastrar Músico"
 
     }
 

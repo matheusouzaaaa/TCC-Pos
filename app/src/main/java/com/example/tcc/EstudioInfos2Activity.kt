@@ -24,7 +24,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClickListener {
+class EstudioInfos2Activity : AppCompatActivity(), EstudioInfoAdapter.OnItemClickListener {
 
     private val REQ_CADASTRO = 1;
     private val REQ_DETALHE = 2;
@@ -39,14 +39,14 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_estudio_infos)
+        setContentView(R.layout.activity_estudio_infos2)
 
         val intent = intent
         val estudio = intent.getSerializableExtra("estudio") as EstudioPlace
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Meu Estúdio - Informações"
+        supportActionBar?.title = "Meu Estúdio - Informaçõesaaa"
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioInfoAdapter(listaSalas)
@@ -126,42 +126,5 @@ class EstudioInfosActivity : AppCompatActivity(), EstudioInfoAdapter.OnItemClick
         Firebase.auth.signOut()
         val intent = Intent (this, LoginActivity::class.java)
         this.startActivity(intent)
-    }
-
-    fun abrirFormularioSala(view: View) {
-        val it = Intent(this, CadastroSalaActivity::class.java)
-        startActivityForResult(it, REQ_CADASTRO)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_CADASTRO) {
-            if (resultCode == Activity.RESULT_OK) {
-                val sala = data?.getSerializableExtra("sala") as Sala
-
-                var ref: DocumentReference = db.collection("salas").document()
-                var docId:String = ref.id.toString()
-
-                val dados = hashMapOf(
-                    "nome" to sala?.nome.toString(),
-                    "preco" to sala?.preco?.toFloat(),
-                    "informacoes" to sala?.informacoes.toString(),
-                    "estudio_id" to estudio_id,
-                    "key" to docId,
-                )
-
-                ref.set(dados)
-                    .addOnSuccessListener {
-                        Log.d(ContentValues.TAG, "DocumentSnapshot added")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error adding document", e)
-                    }
-
-                viewAdapter.notifyDataSetChanged()
-                Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
     }
 }

@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TCC">
         <activity
+            android:name=".EstudioInfos2Activity"
+            android:exported="true" />
+        <activity
             android:name=".ConfirmaCadastroHorarioActivity"
             android:exported="true" />
         <activity

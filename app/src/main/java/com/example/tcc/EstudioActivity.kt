@@ -41,6 +41,7 @@ class EstudioActivity : AppCompatActivity(), EstudioPlaceAdapter.OnItemClickList
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Meu Estúdio - Meus Estúdios"
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioPlaceAdapter(listaEstudios)

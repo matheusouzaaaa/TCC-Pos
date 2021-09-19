@@ -51,7 +51,7 @@ class MyTimeSlotAdapter(private var context: Context, private var timeSlotList: 
             holder.txt_time_slot_description.text = "Ocupado"
             holder.txt_time_slot_description.setTextColor(Color.WHITE)
             holder.txt_time_slot.setTextColor(Color.WHITE)
-            holder.card_time_slot.setBackgroundColor(Color.DKGRAY)
+            holder.card_time_slot.setBackgroundColor(Color.rgb(145,71,255))
             holder.card_time_slot.isClickable = false
         }else{
             Log.d(ContentValues.TAG, "entrou no else no $position")

@@ -20,6 +20,7 @@ class CadastroSalaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cadastro_sala)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = "Cadastrar Sala"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

@@ -62,6 +62,7 @@ class SalaInfosActivity : AppCompatActivity(), ITimeSlotLoadListener, MyTimeSlot
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(false)
+        supportActionBar?.title = "Meu Estúdio - Info Sala"
 
         var textoNomeSala = findViewById<TextView>(R.id.textoNomeSala)
         var textoPreco = findViewById<TextView>(R.id.textoPreco)
