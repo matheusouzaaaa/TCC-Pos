@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tcc.Common.Common
@@ -51,6 +52,7 @@ class MyTimeSlotAdapter(private var context: Context, private var timeSlotList: 
             holder.txt_time_slot_description.setTextColor(Color.WHITE)
             holder.txt_time_slot.setTextColor(Color.WHITE)
             holder.card_time_slot.setBackgroundColor(Color.DKGRAY)
+            holder.card_time_slot.isClickable = false
         }else{
             Log.d(ContentValues.TAG, "entrou no else no $position")
             holder.txt_time_slot_description.text = "Disponível"
@@ -62,14 +64,19 @@ class MyTimeSlotAdapter(private var context: Context, private var timeSlotList: 
             Log.d(ContentValues.TAG, timeSlotList.toString())
             Log.d(ContentValues.TAG, position.toString())
             val horario = timeSlotList.get(position)
-            val intent = Intent(context, ConfirmaCadastroHorarioActivity::class.java)
-            intent.putExtra("horario", horario)
+            if(horario.marcado == "false"){
+                val intent = Intent(context, ConfirmaCadastroHorarioActivity::class.java)
+                intent.putExtra("horario", horario)
 
-            val horarioDescrito = Common.convertTimeSlotToString(position).toString()
-            val params = Bundle()
-            params.putString("horarioDescrito", horarioDescrito as String)
-            intent.putExtras(params)
-            context.startActivity(intent)
+                val horarioDescrito = Common.convertTimeSlotToString(position).toString()
+                val params = Bundle()
+                params.putString("horarioDescrito", horarioDescrito as String)
+                intent.putExtras(params)
+                context.startActivity(intent)
+            }else{
+                Toast.makeText(context, "Horário já está agendado!", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
