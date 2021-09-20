@@ -46,7 +46,7 @@ class EstudioInfos2Activity : AppCompatActivity(), EstudioInfoAdapter.OnItemClic
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Meu Estúdio - Informaçõesaaa"
+        supportActionBar?.title = "Meu Estúdio - Informações"
 
         viewManager = LinearLayoutManager(this)
         viewAdapter = EstudioInfoAdapter(listaSalas)
