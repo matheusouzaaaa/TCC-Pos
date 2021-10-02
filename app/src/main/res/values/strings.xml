@@ -4,8 +4,8 @@
     <string name="email">Email</string>
     <string name="password">Senha</string>
     <string name="login">Login</string>
-    <string name="estudio">Estúdio</string>
-    <string name="musico">Músico</string>
+    <string name="estudio">Sou um Dono de Estúdio</string>
+    <string name="musico">Sou um Músico</string>
     <string name="title_register_login">Não tem cadastro?</string>
     <string name="text_register_login">Escolha uma das opções abaixo</string>
 </resources>

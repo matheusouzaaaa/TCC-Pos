@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.example.tcc.model.EstudioPlace
 import com.example.tcc.model.TimeSlot
 import com.google.firebase.auth.FirebaseAuth
@@ -35,6 +36,10 @@ class ConfirmaCadastroHorarioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_confirma_cadastro_horario)
+
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Confirmação de horário"
 
         val intent = intent
         val horario = intent.getSerializableExtra("horario") as TimeSlot
