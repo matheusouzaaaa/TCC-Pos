@@ -31,7 +31,7 @@ class CadastroEstudioActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Cadastrar Estúdio"
+        supportActionBar?.title = "Cadastrar Proprietário Estúdio"
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
